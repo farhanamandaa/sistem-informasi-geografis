@@ -30,19 +30,5 @@
     </div>
   </div>
 
-<script>
-  function myMap() {
-  var mapProp= 
-  {
-    center:new google.maps.LatLng(-6.2514151,106.8918973),
-    zoom:5,
-  };
-
-  var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-  }
-</script>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYRqW7I9EYdPJZOqiLqTX5QNNx5MlxoE8&callback=myMap"></script>
-
 </body>
 </html>

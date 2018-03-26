@@ -1,3 +1,4 @@
 <h1>My First Google Map</h1>
-
-<div id="googleMap" style="width:100%;height:400px;"></div>
+<div style="width: 1000px; height: 500px;">
+	{!! Mapper::render() !!}
+</div>
