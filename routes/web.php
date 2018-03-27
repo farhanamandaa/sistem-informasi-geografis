@@ -12,3 +12,9 @@
 */
 
 Route::get('/', 'HomeController@index');
+
+Auth::routes();
+
+Route::get('/admin', 'AdminController@index')->name('home');
+
+Route::get('/posts', 'PostsLocationController@index');
