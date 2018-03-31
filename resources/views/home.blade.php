@@ -2,6 +2,9 @@
 
 @section('content')
 <div class="container">
+    @if($flash = session('message'))
+        <div class="alert alert-success"> {{$flash}} </div>
+    @endif
     <div class="row">
         @include('admin.sidebar')
         <div class="col-md-8">
