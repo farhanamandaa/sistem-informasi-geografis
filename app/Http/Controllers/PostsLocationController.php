@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Location;
+use App\Category;
 use Mapper;
 use Illuminate\Http\Request;
 use App\Repositories\Locations\LocationsRepo;
@@ -10,6 +11,7 @@ use App\Repositories\Locations\LocationsRepo;
 class PostsLocationController extends Controller
 {
 	protected $locations;
+
 
     public function __construct(LocationsRepo $locations)
     {
@@ -19,44 +21,61 @@ class PostsLocationController extends Controller
 
     public function index()
     {
-    	$showMap = Mapper::map(-6.175367966166508, 106.82699570410159, ['marker' => 'true' ,'draggable' => true, 'eventDragEnd' => 'setLatLngToForm(event);']);
-    	return view('admin.add');
+    	$showMap = Mapper::map(-6.175367966166508, 106.82699570410159, ['zoom' => 12,'marker' => 'true' ,'draggable' => true, 'eventDragEnd' => 'setLatLngToForm(event);']);
+        $categoryList   = Category::all();
+    	return view('admin.add',compact('categoryList'));
     }
 
     public function store(Request $request)
     {
+        // dd($request->all());
     	$validatedData 	=	$request->validate([
     		'name'            =>	'required',
     		'address'         =>	'required',
     		'latitude'        =>	'required',
     		'longitude'       =>	'required',
             'image'           =>    'required', 
-    		'description'     =>	'required'
+    		'description'     =>	'required',
+            'category_id'     =>    'required'
     	]);
 
-    	// dd($request->all());
+    	
     	$storeData		=	$this->locations->createLocation($request->all());
+
     	session()->flash('message','Success to post');
     	return redirect('/admin');
     }
 
     public function show(Location $location)
     {   
-        $showMap = Mapper::map(-6.175367966166508, 106.82699570410159, ['marker' => 'true' ,'draggable' => true, 'eventDragEnd' => 'setLatLngToForm(event);']);
-        return view('admin.updateLocation', compact('location'));
+        $showMap        = Mapper::map($location->latitude, $location->longitude, ['zoom' => 12,'marker' => 'true' ,'draggable' => true, 'eventDragEnd' => 'setLatLngToForm(event);']);
+        $categoryList   = Category::all();
+        return view('admin.updateLocation', compact('location','categoryList'));
     }
 
-    public function update(Request $request,Location $location)
-    {
-        $updatedData = $this->locations->updateLocation($request->all());
+    public function update(Request $request,$id)
+    {   
+        // dd($request->all());
+        $validatedData  =   $request->validate([
+            'name'            =>    'required',
+            'address'         =>    'required',
+            'latitude'        =>    'required',
+            'longitude'       =>    'required',
+            'image'           =>    'required', 
+            'description'     =>    'required',
+            'category_id'     =>    'required'
+        ]);
+
+        // $updatedData = $this->locations->updateLocation($validatedData);
+        $updatedData = $this->locations->updateLocation($id,$validatedData);
         session()->flash('message','Success to update location');
         return redirect('/admin');
     }
 
     public function delete($id)
     {
-        $data = Location::where('id',$id);
-        $deleteData = $data->delete();
+        $locationData = $this->locations->searchById($id);
+        $deleteData = $locationData->delete();
         session()->flash('message','Success to delete location');
         return redirect('/admin');
     }

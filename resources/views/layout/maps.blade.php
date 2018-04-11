@@ -1,7 +1,7 @@
 <div class="row justify-content-center">
 	<h1>My First Google Map</h1>
 
-	<div style="width: 1000px; height: 500px;" id="map">
+	<div style="width: 1150px; height: 550px;" id="map">
 		{!! Mapper::render() !!}
 	</div>
 	

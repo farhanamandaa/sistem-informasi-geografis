@@ -17,16 +17,20 @@ Auth::routes();
 
 Route::get('/admin', 'AdminController@index')->name('home');
 
-Route::get('/posts', 'PostsLocationController@index');
+Route::get('/posts', 'PostsLocationController@index')->name('posts');
 
 Route::post('/posts', 'PostsLocationController@store');
 
 Route::get('/lists', 'LocationsListController@index')->name('lists');
 
-Route::get('/update/{location}', 'PostsLocationController@show');
+Route::get('/categories', 'CategoryListController@index')->name('categories');
 
-Route::post('/update/{location}', 'PostsLocationController@update');
+Route::get('/updatelocation/{location}', 'PostsLocationController@show');
 
-Route::get('/delete/{location}', 'PostsLocationController@delete');
+Route::post('/updatelocation/{location}', 'PostsLocationController@update');
+
+Route::get('/deletelocation/{location}', 'PostsLocationController@delete');
+
+Route::post('/addcategory', 'CategoryListController@store');
 
 

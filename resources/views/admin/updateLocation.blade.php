@@ -8,7 +8,7 @@
             <div class="card">
                 <div class="card-header">Update Lokasi</div>
                 <div class="card-body">
-                    <form method="POST" action="/update/{{ $location->id }}">
+                    <form method="POST" action="/updatelocation/{{ $location->id }}">
                         @csrf
                         <div class="form-group">
                             <label for="title">Nama Lokasi : </label>
@@ -17,6 +17,14 @@
                         <div class="form-group">
                             <label for="title">Alamat : </label>
                             <input type="text" class="form-control" id="address" name="address" value="{{ $location->address }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="title">Kategori : </label>
+                            <select id="category_id" name="category_id">
+                                @foreach ($categoryList as $category)
+                                    <option value="{{$category->id}}">{{$category->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="row">
                             <div class="col">

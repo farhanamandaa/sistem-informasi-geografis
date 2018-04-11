@@ -4,6 +4,7 @@ namespace App\Repositories\Locations;
 
 use App\Location;
 
+
 class LocationsRepo implements LocationsInterfaces
 {
 	protected $location;
@@ -23,13 +24,18 @@ class LocationsRepo implements LocationsInterfaces
 		return Location::all();
 	}
 
-	public function updateLocation (array $locationData)
+	public function updateLocation ($id,array $locationData)
 	{
-		return $this->location->update($locationData);
+		return $this->location->find($id)->update($locationData);
 	}
 
-	public function deleteLocation ()
+	public function searchById ($id)
 	{
-		return $this->location->delete();
+		return Location::find($id);
+	}
+
+	public function showCategory()
+	{
+		return Category::all();
 	}
 }

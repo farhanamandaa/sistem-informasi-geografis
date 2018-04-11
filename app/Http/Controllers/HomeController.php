@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Location;
 use Mapper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -26,10 +27,30 @@ class HomeController extends Controller
     public function index()
     {
         // return view('home');
-        $showMap = Mapper::map(-6.175367966166508,106.82699570410159,['zoom' => 12,]);
-        // $listMarkers    =   Location::select('latitude','longitude')->get();
+        $showMap = Mapper::map(-6.175367966166508,106.82699570410159,['zoom' => 12,'cluster' => false]);
+        $informationWindow = $this->setInformationWindow();
+    	return view('layout.master');
+    }
+
+    private function setInformationWindow()
+    {
         $dataLocations    =   Location::all();
         foreach ($dataLocations as $dataLocation) {
+            $options = array();
+
+            if ($dataLocation->category_id == 1)
+            {
+                $options = ['icon' => 'storage/1.png']; 
+            }
+            elseif ($dataLocation->category_id == 2)
+            {
+                $options = ['icon' => 'storage/2.png']; 
+            }
+            else
+            {
+                $options = ['icon' => 'storage/3.png'];
+            }
+            
             Mapper::informationWindow($dataLocation->latitude,$dataLocation->longitude,
                 '<div class="content">
                     <div class="header">
@@ -41,9 +62,11 @@ class HomeController extends Controller
                     <div class="description">
                         Deskripsi :'.$dataLocation->description.'
                     </div>
-                </div>');   
+                </div>',$options
+            );
         }
-        // Mapper::map(53.381128999999990000, -1.470085000000040000, ['draggable' => true, 'eventDragEnd' => 'console.log(event.latLng.lat()); console.log(event.latLng.lng());']);
-    	return view('layout.master');
+        return $this;
     }
+
 }
+

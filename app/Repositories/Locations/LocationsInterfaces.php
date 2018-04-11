@@ -6,6 +6,7 @@ interface LocationsInterfaces
 {
 	public function createLocation(array $locationData);
 	public function showLocation();
-	public function updateLocation(array $locationData);
-	public function deleteLocation();
+	public function updateLocation($id,array $locationData);
+	public function searchById($id);
+	public function showCategory();
 }

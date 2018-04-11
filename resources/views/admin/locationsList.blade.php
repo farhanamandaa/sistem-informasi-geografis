@@ -23,8 +23,8 @@
 						<td>{{ $data->latitude }}</td>
 						<td>{{ $data->longitude }}</td>
 						<td>{{ $data->description }}</td>
-						<td><a href="/update/{{ $data->id }}">Edit</a>|
-							<form method="DELETE" action="/delete/{{ $data->id }}">
+						<td><a href="/updatelocation/{{ $data->id }}">Edit</a>|
+							<form method="DELETE" action="/deletelocation/{{ $data->id }}">
 								@csrf
 								<button type="submit">Delete</button>
 							</form>
