@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Location;
 use App\Repositories\Locations\LocationsRepo;
 use Illuminate\Http\Request;
 

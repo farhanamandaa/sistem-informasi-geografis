@@ -2,27 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Location;
-use App\Category;
 use Mapper;
+use App\Location;
 use Illuminate\Http\Request;
 use App\Repositories\Locations\LocationsRepo;
+use App\Repositories\Categories\CategoriesRepo;
 
 class PostsLocationController extends Controller
 {
 	protected $locations;
+    const LATITUDE  = -6.175367966166508;
+    const LONGITUDE = 106.82699570410159;
 
-
-    public function __construct(LocationsRepo $locations)
+    public function __construct(LocationsRepo $locations, CategoriesRepo $category)
     {
     	$this->middleware('auth');
-    	$this->locations = $locations;
+    	$this->locations    = $locations;
+        $this->category     = $category;  
     }
 
     public function index()
     {
-    	$showMap = Mapper::map(-6.175367966166508, 106.82699570410159, ['zoom' => 12,'marker' => 'true' ,'draggable' => true, 'eventDragEnd' => 'setLatLngToForm(event);']);
-        $categoryList   = Category::all();
+    	$showMap = Mapper::map(self::LATITUDE, self::LONGITUDE, ['zoom' => 12,'marker' => 'true' ,'draggable' => true, 'eventDragEnd' => 'setLatLngToForm(event);']);
+        $categoryList   = $this->category->showCategory();
     	return view('admin.add',compact('categoryList'));
     }
 
@@ -49,7 +51,7 @@ class PostsLocationController extends Controller
     public function show(Location $location)
     {   
         $showMap        = Mapper::map($location->latitude, $location->longitude, ['zoom' => 12,'marker' => 'true' ,'draggable' => true, 'eventDragEnd' => 'setLatLngToForm(event);']);
-        $categoryList   = Category::all();
+        $categoryList   = $this->category->showCategory();
         return view('admin.updateLocation', compact('location','categoryList'));
     }
 

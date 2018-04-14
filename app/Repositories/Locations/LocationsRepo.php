@@ -21,7 +21,7 @@ class LocationsRepo implements LocationsInterfaces
 
 	public function showLocation ()
 	{
-		return Location::all();
+		return $this->location->all();
 	}
 
 	public function updateLocation ($id,array $locationData)
@@ -31,11 +31,11 @@ class LocationsRepo implements LocationsInterfaces
 
 	public function searchById ($id)
 	{
-		return Location::find($id);
+		return $this->location->find($id);
 	}
 
-	public function showCategory()
+	public function showLocationByCategory(array $id)
 	{
-		return Category::all();
+		return $this->location->whereIn('category_id',$id)->get();
 	}
 }

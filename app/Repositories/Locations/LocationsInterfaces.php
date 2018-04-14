@@ -8,5 +8,5 @@ interface LocationsInterfaces
 	public function showLocation();
 	public function updateLocation($id,array $locationData);
 	public function searchById($id);
-	public function showCategory();
+	public function showLocationByCategory(array $id);
 }

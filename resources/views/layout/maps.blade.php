@@ -1,12 +1,10 @@
-<div class="row justify-content-center">
-	<h1>My First Google Map</h1>
+<div class="col-md-10">
 
-	<div style="width: 1150px; height: 550px;" id="map">
-		{!! Mapper::render() !!}
-	</div>
-	
+		<div style="width: 1000px; height: 630px;" id="map">
+			{!! Mapper::render() !!}
+		</div>
+		
 </div>
-
 <script type="text/javascript">
 function addMarker(map)
 {

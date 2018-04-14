@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Location;
 use Mapper;
+use App\Location;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Repositories\Locations\LocationsRepo;
+use App\Repositories\Categories\CategoriesRepo;
 
 class HomeController extends Controller
 {
@@ -14,9 +15,12 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(LocationsRepo $location,CategoriesRepo $category,Request $request)
     {
         $this->middleware('auth')->except('index');
+        $this->location =   $location;
+        $this->category =   $category;
+        $this->request  =   $request;
     }
 
     /**
@@ -28,13 +32,21 @@ class HomeController extends Controller
     {
         // return view('home');
         $showMap = Mapper::map(-6.175367966166508,106.82699570410159,['zoom' => 12,'cluster' => false]);
-        $informationWindow = $this->setInformationWindow();
-    	return view('layout.master');
+        $informationWindow  = $this->setInformationWindow();
+        $showCategory       = $this->category->showCategory();
+    	return view('layout.master', compact('showCategory'));
     }
 
     private function setInformationWindow()
-    {
-        $dataLocations    =   Location::all();
+    {   
+        if ($this->request->categories == null)
+        {
+            $dataLocations      =   $this->location->showLocation();
+        }
+        else
+        {
+            $dataLocations      =   $this->location->showLocationByCategory($this->request->categories);
+        }
         foreach ($dataLocations as $dataLocation) {
             $options = array();
 

@@ -33,4 +33,3 @@ Route::get('/deletelocation/{location}', 'PostsLocationController@delete');
 
 Route::post('/addcategory', 'CategoryListController@store');
 
-

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
 use App\Repositories\Categories\CategoriesRepo;
 use Illuminate\Http\Request;
 
