@@ -31,15 +31,16 @@ class HomeController extends Controller
     public function index()
     {
         // return view('home');
-        $showMap = Mapper::map(-6.175367966166508,106.82699570410159,['zoom' => 12,'cluster' => false]);
+        $showMap = Mapper::map(-6.175367966166508,106.82699570410159,['zoom' => 12,'cluster' => false,'eventAfterLoad' => 'initLegend(map);']);
         $informationWindow  = $this->setInformationWindow();
         $showCategory       = $this->category->showCategory();
-    	return view('layout.master', compact('showCategory'));
+        $showLocation       = $this->location->showLocation();
+    	return view('layout.master', compact('showCategory','showLocation'));
     }
 
     private function setInformationWindow()
     {   
-        if ($this->request->categories == null)
+        if (empty($this->request->categories))
         {
             $dataLocations      =   $this->location->showLocation();
         }
@@ -71,10 +72,13 @@ class HomeController extends Controller
                     <div class="address">
                         Alamat :'.$dataLocation->address.'
                     </div>
+                    <div class="image">
+                        <img src="'.$dataLocation->image.'" id="image"></img>
+                    </div>
                     <div class="description">
                         Deskripsi :'.$dataLocation->description.'
                     </div>
-                </div>',$options
+                </div>',array_merge($options,['autoClose' => true])
             );
         }
         return $this;
