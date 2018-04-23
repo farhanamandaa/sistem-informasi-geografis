@@ -34,7 +34,14 @@ class HomeController extends Controller
         $showMap = Mapper::map(-6.175367966166508,106.82699570410159,['zoom' => 12,'cluster' => false,'eventAfterLoad' => 'initLegend(map);']);
         $informationWindow  = $this->setInformationWindow();
         $showCategory       = $this->category->showCategory();
-        $showLocation       = $this->location->showLocation();
+        if (empty($this->request->categories))
+        {
+            $showLocation       = $this->location->showLocation();
+        }
+        else
+        {
+            $showLocation       = $this->location->showLocationByCategory($this->request->categories);  
+        }
     	return view('layout.master', compact('showCategory','showLocation'));
     }
 

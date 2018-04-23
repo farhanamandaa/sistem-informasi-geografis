@@ -1,4 +1,4 @@
-<div class="col-md-10">
+	<div class="col-md-10">
 
 	<div style="width: 1000px; height: 630px;" id="map">
 		{!! Mapper::render() !!}
@@ -11,7 +11,12 @@
 	<div id="floating-panel">
 		<select id="start">
 			@foreach ($showLocation as $location)
-				<option value="{{ $location->id }}">{{ $location->name }}</option>
+				<option value="{{ $location->name }}">{{ $location->name }}</option>
+			@endforeach
+		</select>
+		<select id="end">
+			@foreach ($showLocation as $location)
+				<option value="{{ $location->name }}">{{ $location->name }}</option>
 			@endforeach
 		</select>
 	</div>
@@ -19,6 +24,10 @@
 </div>
 <script type="text/javascript">
 	function initLegend(map){
+
+		var directionsService = new google.maps.DirectionsService;
+		var directionsDisplay = new google.maps.DirectionsRenderer;
+
 		var icons = 
 		{
 			museum : {
@@ -51,36 +60,62 @@
 
 		$("#legend").show(); /*Show legend after map loaded*/
 
+		
+		directionsDisplay.setMap(map);
 
-		onMapLoad(map);
+		var onChangeHandler = function() {
+          calculateAndDisplayRoute(directionsService, directionsDisplay);
+        };
+        document.getElementById('start').addEventListener('change', onChangeHandler);
+        document.getElementById('end').addEventListener('change', onChangeHandler);
+
+		getCurrentLocation(map);
+
+		function getCurrentLocation(map)
+	    {   
+	    	$("#getlocation").click(function(){
+		        if (navigator.geolocation) {
+		            navigator.geolocation.getCurrentPosition(
+		                function(position) {
+		                    var pos = {
+		                        lat: position.coords.latitude,
+		                        lng: position.coords.longitude
+		                    };
+
+		                    var marker = new google.maps.Marker({
+		                      position: pos,
+		                      map: map,
+		                      title: "Location found."
+		                    });
+
+		                    map.setCenter(pos);
+		                    map.panTo(pos);
+		                    $('#start').append($('<option>', {
+    							value: [pos.lat,pos.lng],
+    							text: 'Lokasi Saya'
+								}));
+		                    // map.setZoom(16);
+		                }
+		            );
+		        }
+		    });
+		}
+
+		function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+	        directionsService.route({
+	          origin: document.getElementById('start').value,
+	          destination: document.getElementById('end').value,
+	          travelMode: 'DRIVING'
+	        }, function(response, status) {
+	          if (status === 'OK') {
+	            directionsDisplay.setDirections(response);
+	          } else {
+	            window.alert('Directions request failed due to ' + status);
+	          }
+	        });
+      	}
 	}
 
-
-	function onMapLoad(map)
-    {   
-    	$("#getlocation").click(function(){
-	        if (navigator.geolocation) {
-	            navigator.geolocation.getCurrentPosition(
-	                function(position) {
-	                    var pos = {
-	                        lat: position.coords.latitude,
-	                        lng: position.coords.longitude
-	                    };
-
-	                    var marker = new google.maps.Marker({
-	                      position: pos,
-	                      map: map,
-	                      title: "Location found."
-	                    });
-
-	                    map.setCenter(pos);
-	                    map.panTo(pos);
-	                    // map.setZoom(16);
-	                }
-	            );
-	        }
-	    });
-	}
 
 </script>
 
